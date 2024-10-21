@@ -12,12 +12,12 @@ const connectionRequestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["pending", "accepted", "rejected"],
+        enum: ["pending", "accepted", "rejected","interested","ignored"],
         default: "pending",
         required: true,
     }
 });
-connectionRequestSchema.index({ first: 1, last: -1 }, { unique: true })
+connectionRequestSchema.index({ sender: 1, receiver: -1 }, { unique: true })
 
 connectionRequestSchema.pre("save", async function (next) {
     const sender = await mongoose.model("User").findById(this.sender)

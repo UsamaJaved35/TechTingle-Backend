@@ -2,7 +2,7 @@ const { UserModel } = require('../models/user');
 const connectionRequest = require('../models/connectionRequest');
 const mongoose = require('mongoose');
 
-const createConnectionRequest = async (sender, receiverId) => {
+const createConnectionRequest = async (sender, receiverId, status) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -17,7 +17,6 @@ const createConnectionRequest = async (sender, receiverId) => {
         const existingRequest = await connectionRequest.findOne({
             sender: sender._id,
             receiver: receiver._id,
-            status: 'pending',
         });
 
         if (existingRequest) throw new Error("Connection request already sent");
@@ -33,7 +32,7 @@ const createConnectionRequest = async (sender, receiverId) => {
         const newConnectionRequest = new connectionRequest({
             sender: sender._id,
             receiver: receiver._id,
-            status: 'pending',
+            status: status,
         });
 
         await newConnectionRequest.save({ session });
