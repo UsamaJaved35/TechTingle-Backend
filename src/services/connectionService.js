@@ -46,7 +46,6 @@ const reviewConnectionRequest = async (loggedInUser, requestId, status) => {
         }).populate('sender','connections');
         if (!request) throw new Error("Connection request not found");
         request.status = status;
-        console.log(request.sender.connections);
         if (status === "accepted") {
             loggedInUser.connections.push(request.sender._id);
             request.sender.connections.push(loggedInUser._id);
