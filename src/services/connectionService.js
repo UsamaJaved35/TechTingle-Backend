@@ -21,14 +21,6 @@ const createConnectionRequest = async (sender, receiverId, status) => {
 
         if (existingRequest) throw new Error("Connection request already sent");
 
-        receiver.connections.push(sender._id);
-        sender.connections.push(receiver._id);
-
-        await Promise.all([
-            receiver.save({ session }),
-            sender.save({ session }),
-        ]);
-
         const newConnectionRequest = new connectionRequest({
             sender: sender._id,
             receiver: receiver._id,
@@ -45,6 +37,35 @@ const createConnectionRequest = async (sender, receiverId, status) => {
     }
 };
 
+const reviewConnectionRequest = async (loggedInUser, requestId, status) => {
+    try {
+        const request = await connectionRequest.findOne({
+            _id: requestId,
+            receiver: loggedInUser._id,
+            status: "interested",
+        }).populate('sender','connections');
+        if (!request) throw new Error("Connection request not found");
+        request.status = status;
+        console.log(request.sender.connections);
+        if (status === "accepted") {
+            loggedInUser.connections.push(request.sender._id);
+            request.sender.connections.push(loggedInUser._id);
+        }
+        const data = await request.save();
+        await loggedInUser.save();
+        await request.sender.save();
+
+        if (status === "rejected") {
+            await connectionRequest.deleteOne({ _id: requestId });
+        }
+        return data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 module.exports = {
     createConnectionRequest,
+    reviewConnectionRequest
 };
