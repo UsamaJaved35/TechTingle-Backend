@@ -33,8 +33,8 @@ profileRouter.get('/profile/:id',userAuth, async (req,res)=>{
 profileRouter.patch('/user/:id',userAuth, async (req,res)=>{
     try{
         const {id} = req.params
-        const {firstName, lastName, password, gender, photoUrl, skills} = req.body
-        const user = await UserModel.findByIdAndUpdate(id, {firstName, lastName, password, gender, photoUrl, skills},
+        const {firstName, lastName, gender, photoUrl, skills,age,about } = req.body
+        const user = await UserModel.findByIdAndUpdate(id, {firstName, lastName, gender, photoUrl, skills, age, about},
             { new: true, runValidators: true }
         )
         if(!user) return res.status(404).send({message: "User not found"})

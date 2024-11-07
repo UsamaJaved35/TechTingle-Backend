@@ -4,7 +4,7 @@ const connectionRequest = require('../models/connectionRequest')
 const { UserModel } = require('../models/user')
 const userRouter = express.Router()
 
-const REQUIRED_FIELDS = ['firstName', 'lastName', 'password', 'age', 'gender', 'email', 'photoUrl', 'skills']
+const REQUIRED_FIELDS = ['firstName', 'lastName', 'age', 'gender', 'email', 'photoUrl', 'skills','about'];
 userRouter.get('/user/requests/received',userAuth, async (req,res)=>{
 
     try{

@@ -21,10 +21,10 @@ const reviewConnectionRequest = async(req,res)=>{
         const {status,requestId} = req.params
         if(!ALLOWED_STATUSES.includes(status)) return res.status(400).send({message: "Invalid Status"})
         const data = await connectionService.reviewConnectionRequest(loggedInUser,requestId,status)
-        res.status(200).send({data: data,message: "Connection Request"+ status + " Successfully"})
+        res.status(200).send({data: data,message: "Connection Request "+ status + " Successfully"})
     }
     catch(err){
-        res.status(500).send({error:err.message, message: "Something went wrong!!"})
+        res.status(400).send({error:err.message, message: "Something went wrong!!"})
     }
 }
 
