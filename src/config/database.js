@@ -6,10 +6,11 @@ const mongoose = require("mongoose")
 // module.exports = connectDb
 
 const connectDb = (connString,app) => {
+  const PORT = process.env.PORT || 7777
   mongoose.connect(connString)
     .then(() => {
       console.log('Connected to DB');
-      app.listen(7777,()=>{
+      app.listen(PORT,'0.0.0.0' , ()=>{
                 console.log("Connected to server");
             })
     })
