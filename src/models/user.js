@@ -30,7 +30,7 @@ const userSchema = new Schema({
   about:{
     type: String,
     minLength:10,
-    maxLength:50
+    maxLength:160
   },
   gender:{
     type: String,
@@ -57,7 +57,7 @@ const userSchema = new Schema({
   },
   photoUrl:{
     type: String,
-    default: "https://png.pngtree.com/png-clipart/20210129/ourmid/pngtree-default-male-avatar-png-image_2811083.jpg",
+    default: "https://res.cloudinary.com/dbwm2aois/image/upload/v1730479101/jmbxo0web5rl2nmy4hte.jpg",
     validate: {
       validator: function(v) {
         return validator.isURL(v);
@@ -100,11 +100,19 @@ const userSchema = new Schema({
 });
 userSchema.index({ firstName: 1, lastName: -1 })
 
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
+
 userSchema.methods.getJWT = function () {
   return jwt.sign({id: this._id}, "secret", {expiresIn: "7d"});
 }
 
 userSchema.methods.validatePassword = async function (password) {
+  console.log(password, this.password);
   return await bcrypt.compare(password, this.password);
 }
 
