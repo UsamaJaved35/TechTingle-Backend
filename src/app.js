@@ -19,6 +19,12 @@ app.use(cors(
 app.use(express.json())
 app.use(cookieParser())
 
+app.use("/", (req, res, next) => {
+    res.send("Hello from the server")
+})
+app.use("/xyz", (req, res, next) => {
+    res.send("Hello from xyz")
+})
 app.use("/auth", authRouter)
 app.use("/", profileRouter)
 app.use("/",requestRouter)
