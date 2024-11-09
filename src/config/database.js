@@ -12,6 +12,7 @@ const connectDb = (connString,app) => {
       console.log('Connected to DB');
       app.listen(PORT,'0.0.0.0' , ()=>{
                 console.log("Connected to server");
+                console.log(`Server running on port ${PORT}`);
             })
     })
     .catch((err) => {
