@@ -18,7 +18,7 @@ authRouter.post('/signup', async (req,res)=>{
         REQUIRED_FIELDS.forEach(field => {
             userWithoutPassword[field] = userObj[field]
         })        
-        res.cookie("token", token).status(200).send({user: userWithoutPassword, message: "User created Successfully"})
+        res.cookie("token", token,{ secure: true, sameSite: 'None'}).status(200).send({user: userWithoutPassword, message: "User created Successfully"})
     }
     catch(err){
         res.status(500).send({error:err.message, message: "Something went wrong!!"})
@@ -38,7 +38,7 @@ authRouter.post('/login', async (req,res)=>{
         REQUIRED_FIELDS.forEach(field => {
             userWithoutPassword[field] = userObj[field]
         })        
-        res.cookie("token", token).status(200).send({user: userWithoutPassword, message: "User logged in Successfully"})
+        res.cookie("token", token,{ secure: true, sameSite: 'None'}).status(200).send({user: userWithoutPassword, message: "User logged in Successfully"})
     }
     catch(err){
         res.status(500).send({error:err.message, message: "Something went wrong!!"})
